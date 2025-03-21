@@ -1,10 +1,21 @@
 import { registerPlugin } from '@capacitor/core';
 
-import type { IcloudDrivePlugin } from './definitions';
+export interface CloudStoragePlugin {
+  saveToiCloudDrive(options: { fileName: string; data: string }): Promise<{ uri: string; path: string }>;
+  readFromiCloudDrive(options: { fileName: string }): Promise<{ data: string; uri: string; path: string }>;
+  listFilesFromiCloudDrive(): Promise<{ 
+    files: Array<{
+      name: string;
+      uri: string;
+      path: string;
+      size: number;
+      modifiedDate: number;
+      createdDate: number;
+    }> 
+  }>;
+  deleteFromiCloudDrive(options: { fileName: string }): Promise<void>;
+}
 
-const IcloudDrive = registerPlugin<IcloudDrivePlugin>('IcloudDrive', {
-  web: () => import('./web').then((m) => new m.IcloudDriveWeb()),
-});
+const CloudStorage = registerPlugin<CloudStoragePlugin>('CloudStorage');
 
-export * from './definitions';
-export { IcloudDrive };
+export default CloudStorage;
